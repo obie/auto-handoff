@@ -1,0 +1,26 @@
+{
+  "name": "auto-handoff",
+  "owner": {
+    "name": "Obie Fernandez"
+  },
+  "metadata": {
+    "description": "A Claude Code plugin that writes a handoff document before an idle session's prompt cache goes cold",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "auto-handoff",
+      "source": "./",
+      "description": "Writes a handoff document when a session has sat idle long enough that its prompt cache is about to go cold.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Obie Fernandez"
+      },
+      "keywords": ["handoff", "prompt-cache", "idle", "session", "hooks"],
+      "category": "productivity",
+      "homepage": "https://github.com/obie/auto-handoff",
+      "repository": "https://github.com/obie/auto-handoff",
+      "license": "MIT"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "auto-handoff",
+  "version": "0.1.0",
+  "description": "Writes a handoff document when a session has sat idle long enough that its prompt cache is about to go cold.",
+  "author": { "name": "Obie Fernandez" },
+  "homepage": "https://github.com/obie/auto-handoff",
+  "repository": "https://github.com/obie/auto-handoff",
+  "license": "MIT",
+  "keywords": ["handoff", "prompt-cache", "idle", "session", "hooks"],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "minutes": {
+      "type": "number",
+      "title": "Idle minutes",
+      "description": "How long the session sits idle after its last turn before the command runs. The prompt cache lasts an hour, so 50 leaves ten minutes for the handoff itself.",
+      "default": 50
+    },
+    "command": {
+      "type": "string",
+      "title": "Command",
+      "description": "The slash command to run, without its slash. The default is the handoff skill this plugin ships; name your own to use it instead.",
+      "default": "auto-handoff:handoff"
+    }
+  }
+}
