@@ -18,7 +18,7 @@
     "command": {
       "type": "string",
       "title": "Command",
-      "description": "The slash command to run, without its slash. The default is the handoff skill this plugin ships; name your own to use it instead.",
+      "description": "The slash command to run, as you would type it: its name, then any arguments. The default is the handoff skill this plugin ships; name your own to use it instead.",
       "default": "auto-handoff:handoff"
     }
   }

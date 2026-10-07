@@ -23,9 +23,11 @@ const prompt = (kind: 'composer' | 'task-notification') => ({
 const engine = (on: On) => {
   const clock = mock.clock(on)
   const ran: string[] = []
+  const args: string[] = []
 
   on('command.run', (_$, e) => {
     ran.push(e.command)
+    args.push(e.args)
 
     return { text: '' }
   })
@@ -34,7 +36,7 @@ const engine = (on: On) => {
   on('prompt.submit', (_$, e) => ({ text: e.text }))
   on('session.end', (_$, e) => ({ sessionId: e.sessionId }))
 
-  return { clock, ran }
+  return { clock, ran, args }
 }
 
 test('runs the handoff once the session sat idle for 50 minutes', async ($, on) => {
@@ -133,5 +135,18 @@ test(
 
     await clock.advance(MINUTE)
     expect(ran).toEqual(['context-save'])
+  },
+)
+
+test(
+  'passes whatever follows the command name on as its arguments',
+  { options: { minutes: 5, command: '/my-plugin:park  idle-triggered checkpoint' } },
+  async ($, on) => {
+    const { clock, ran, args } = engine(on)
+
+    await $.turn.complete(turn('t1'))
+    await clock.advance(5 * MINUTE)
+    expect(ran).toEqual(['my-plugin:park'])
+    expect(args).toEqual(['idle-triggered checkpoint'])
   },
 )
