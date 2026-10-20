@@ -38,13 +38,15 @@ Nobody is there to answer a permission prompt when it runs, so the skill pre-app
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `minutes` | `50` | Idle time before the command runs |
-| `command` | `auto-handoff:handoff` | Slash command to run, without the slash |
+| `command` | `auto-handoff:handoff` | Slash command to run, as you would type it, with any arguments after its name |
 
 Set them with `/plugin configure auto-handoff` inside Claude Code, or from a shell:
 
 ```
 echo '{"command": "my-plugin:my-handoff"}' | claude plugin configure auto-handoff@auto-handoff --values-stdin
 ```
+
+Arguments go after the command's name, as they would at the prompt. A command that behaves differently when nobody is there can be told so: `my-plugin:park idle-triggered`.
 
 A command of your own has to get through an unattended run. Give it `allowed-tools` for whatever it calls, or run your sessions in a permission mode that lets it write.
 

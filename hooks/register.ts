@@ -32,7 +32,7 @@ const idleSince = atom(
 )
 const isDone = atom({ plugin: 'auto-handoff', key: 'isDone' } as const, false)
 
-type Plan = { wait: number; command: string }
+type Plan = { wait: number; command: string; args: string }
 
 let timer: Timer | undefined
 
@@ -41,7 +41,7 @@ function disarm() {
   timer = undefined
 }
 
-async function handOff($: EngineInterface, { wait, command }: Plan) {
+async function handOff($: EngineInterface, { wait, command, args }: Plan) {
   timer = undefined
   const since = await read($, idleSince)
 
@@ -66,7 +66,7 @@ async function handOff($: EngineInterface, { wait, command }: Plan) {
   $.ui.toast(`idle for ${minutes} min, running /${command}`)
 
   try {
-    await $.command.run({ command })
+    await $.command.run({ command, args })
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error)
     $.ui.toast(`/${command} did not run: ${reason}`)
@@ -86,9 +86,15 @@ async function wake($: EngineInterface, origin: PromptOrigin) {
 
 export const register: Register = (on, options) => {
   const minutes = Number(options.minutes)
+  // The command reads as it would be typed: its name, then any arguments.
+  const [command, args = ''] = String(options.command)
+    .trim()
+    .replace(/^\//, '')
+    .split(/\s+(.*)/s)
   const plan: Plan = {
     wait: (minutes > 0 ? minutes : DEFAULT_MINUTES) * MINUTE,
-    command: String(options.command).replace(/^\//, ''),
+    command,
+    args,
   }
 
   // A reload drops the timer and keeps the state: pick the wait up where it
